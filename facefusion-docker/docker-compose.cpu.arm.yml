@@ -1,0 +1,18 @@
+services:
+  facefusion-cpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.cpu.arm  # 使用 ARM 专属 Dockerfile
+      args:
+        # 可在这里修改版本或仓库地址，无需改 Dockerfile
+        FACEFUSION_REPO: https://github.com/blueflylabor/facefusion.git
+    command: [ 'python', 'facefusion.py', 'run' ]
+    volumes:
+      # 挂载数据目录，持久化资产、缓存和任务（避免每次重建丢失数据）
+      - .assets:/facefusion/.assets
+      - .caches:/facefusion/.caches
+      - .jobs:/facefusion/.jobs
+    ports:
+      - 7865:7860  # 本地 7865 端口映射到容器内 7860 端口（可自定义本地端口）
+    # 明确指定平台为 ARM64，避免架构不匹配
+    platform: linux/arm64/v8

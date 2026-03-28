@@ -1,0 +1,10 @@
+services:
+  facefusion-cpu:
+    image: facefusion/facefusion:3.3.2-cpu
+    platform: linux/amd64  # 仅 ARM 架构主机（如 M 芯片 Mac）需要，x86 主机可省略
+    ports:
+      - "7860:7860"  # Docker 层面映射端口，无需在程序命令中指定
+    volumes:
+      - ./facefusion:/facefusion
+    command: >
+      sh -c "python facefusion.py run"  # 去掉 --port 参数，仅保留 run 命令
